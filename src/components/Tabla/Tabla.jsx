@@ -12,6 +12,7 @@ export const Tabla = ({us}) => {
                     <td>Nombre</td>
                     <td>Activo</td>
                     <td>Fecha</td>
+                    <td>Sueldo</td>
                     <td>Editar</td>
                 </tr>
             </thead>

@@ -15,11 +15,24 @@ const usuariosRef = db.collection('usuarios')
 //                 activo: false
 //             } )
 
+export const agregarUsuarios = ( usuario ) => {
+    
+    usuariosRef
+    .add( usuario )
+    .then( res => {
+        console.log( res.id )
+        return res.id
+    } ).catch( e => console.log(e))
 
 
-export const leerUsuarios = async (  )=> {
-    let us = await usuariosRef.get()
+} 
+
+export const leerUsuarios = async ( campo = '' )=> {
     let todos =  []
+
+    if ( campo == '' ) {
+        let us = await  usuariosRef.get()
+        console.log( us )
         us.forEach( u => {
             todos.push(
                 ...todos ,
@@ -30,8 +43,23 @@ export const leerUsuarios = async (  )=> {
             )
         })
 
-        todos = [... new Set(todos)]
-        
+        todos = [... new Set(todos)]    
+    }else {
+        let iguales = await  usuariosRef
+                                .where( campo , '==' , true)
+                                .get()
+                                .catch(err=>console.log(err))
+
+            iguales.forEach(r=>{
+                todos = [
+                    ...todos ,
+                    {
+                        id: r.id,
+                        data : r.data()
+                    }
+                ]
+            })  
+    }
         return  todos
     
 }
@@ -39,7 +67,10 @@ export const leerUsuarios = async (  )=> {
 
 // Seleccionar por campo
 export const getPorCampo = async ( campo ) => {
-    let iguales = await  usuariosRef.where( campo , '==' , true).get().catch(err=>console.log(err))
+    let iguales = await  usuariosRef
+                            .where( campo , '==' , true)
+                            .get()
+                            .catch(err=>console.log(err))
     let todos =  []
         iguales.forEach(r=>{
             todos = [
@@ -50,10 +81,6 @@ export const getPorCampo = async ( campo ) => {
                 }
             ]
         })    
-        
-        // console.log( todos )
-
-
     return todos
 }
 
@@ -64,4 +91,16 @@ export const desactivar = async ( { target } ) => {
     usuariosRef.doc( id ).update({
         activo : !activo
     }).catch(err=>console.log(err))
+
+    
+}
+
+
+export const obId = async ( { target } ) => {
+    const { id , activo } = target.dataset
+    let user = usuariosRef
+                .doc( id )
+                .get()
+    console.log( user )
+    return user
 }

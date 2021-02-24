@@ -1,21 +1,10 @@
-import { Fragment, useState } from 'react/cjs/react.development';
+import { obId } from './../../helpers/funFireStore';
+import { Fragment } from 'react/cjs/react.development';
 import React from 'react'
-import { Button, Modal } from 'react-bootstrap'
 import { desactivar } from '../../helpers/funFireStore';
 
 export const Celdas = ({ us }) => {
 
-    const [id, setid] = useState('')
-
-    const handleClick = ({ target }) => {
-        console.log( target )
-    }
-
-    const handleClickBorrar = ( { target } , borrar )=> {
-
-        // console.log( target.dataset.id )
-        desactivar( target.dataset.id  )
-    }
 
     return (
         <Fragment>
@@ -37,11 +26,14 @@ export const Celdas = ({ us }) => {
                                 {data.fechaNacimiento}
                             </td>
                             <td>
+                                { data.salario }
+                            </td>
+                            <td>
                                 <button
                                     className="btn btn-sm btn-info mr-1"
                                     data-toggle="modal"
                                     data-id={id}
-                                    onClick={(data) => handleClick(data)}
+                                    onClick={(data) => obId(data)}
                                     href="#modal-id"
                                     >Editar</button>
                                 <button
